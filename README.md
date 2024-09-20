@@ -1,2 +1,3 @@
 # Sistema de login
- primeiro repositorio
+
+ Um Sistema de login, registro e gerenciamento de tarefas feito com python
