@@ -24,6 +24,33 @@ def sair(janela_atual):
     r = messagebox.askquestion('Fechar a janela', 'Você realmente deseja fechar a janela?')
     if r.lower() == 'yes':
         janela_atual.destroy()
+        
+def entrar():
+    
+    global  s_es, n_es
+    
+    nomes = n_es.get()
+    senha = s_es.get()
+        
+    try:
+        
+       with conexao.cursor() as cursor:
+           
+            sql = 'select * from registro WHERE nome = %s AND senha = %s'
+            cursor.execute(sql, (nomes, senha))
+            w = cursor.fetchone()
+            
+            if w == None:
+                messagebox.showinfo('Acesso Negado!', 'Acesso negado, verifique as informações inseridas ou se registre!')
+
+            else:
+                messagebox.showinfo('Acesso aceito!', f'Seja bem-vindo(a) {nomes}')
+                
+    except pymysql.Error as error:
+        conexao.rollback()
+        messagebox.showerror('Erro', f'{error}')
+        
+                 
 
 def registro():
     global n_e, e_e, s_e, nome, email, senha
@@ -82,7 +109,7 @@ def pergunta():
         
 def login():
     
-    global janela3, janela
+    global janela3, janela, s_es, n_es
     
     janela.destroy()
     
@@ -95,16 +122,16 @@ def login():
     n_t = tk.Label(janela3, text='Nome', font=('Arial', 16))
     n_t.place(rely=0.3, relx=0.43)
     
-    n_e = tk.Entry(janela3, font=20, border=3, borderwidth=3)
-    n_e.place(rely=0.305, relx=0.47)
+    n_es = tk.Entry(janela3, font=20, border=3, borderwidth=3)
+    n_es.place(rely=0.305, relx=0.47)
     
     s_t = tk.Label(janela3, text='senha', font=('Arial', 16))
     s_t.place(rely=0.35, relx=0.43)
     
-    s_e = tk.Entry(janela3,font=20, border=3, borderwidth=3, show='*')
-    s_e.place(rely=0.353, relx=0.47)
+    s_es = tk.Entry(janela3,font=20, border=3, borderwidth=3, show='*')
+    s_es.place(rely=0.353, relx=0.47)
     
-    b = tk.Button(janela3, text='login', height=1, width=8, border=3, borderwidth=3, )
+    b = tk.Button(janela3, text='login', height=1, width=8, border=3, borderwidth=3, command=entrar)
     b.place(rely=0.4, relx=0.485)
     
     b_r = tk.Button(janela3, text='Retornar', height=2, width=17, border=3, borderwidth=3, command=lambda: (retornar(janela3)))
