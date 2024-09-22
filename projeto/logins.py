@@ -9,6 +9,7 @@ conexao = pymysql.connect(
     database = 'high'
 )
 
+janela = ''
 nome = ''
 email = ''
 senha = ''
