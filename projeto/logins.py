@@ -9,10 +9,18 @@ conexao = pymysql.connect(
     database = 'high'
 )
 
-janela = ''
 nome = ''
 email = ''
 senha = ''
+
+def alternar_visibilidade():
+    global s_es
+    if s_es.cget('show') == '*':
+        s_es.config(show='')  # Mostra a senha
+        botao.config(text='Esconder')  # Muda o texto do botão
+    else:
+        s_es.config(show='*')  # Esconde a senha
+        botao.config(text='Mostrar')  # Muda o texto do botão
 
 def retornar(janela_atual):
     
@@ -47,7 +55,7 @@ def entrar():
             else:
                 messagebox.showinfo('Acesso aceito!', f'Seja bem-vindo(a) {nomes}')
                 janela3.destroy()
-                perguntass()
+                BrainBuster(titulo=tk.Tk())
                 
     except pymysql.Error as error:
         conexao.rollback()
@@ -78,41 +86,9 @@ def registro():
         messagebox.showerror('Erro', f'{error}')
         
             
-class perguntass:
-    def __init__(self, titulo):
-        self.titulo = titulo
-        self.titulo.title("Sistema de Perguntas e Respostas")
-        self.titulo.geometry("400x400")
-
-        self.temas = {}
-        self.tema_atual = ""
-        self.perguntas = []
-        self.respostas = []
-        self.indice_pergunta = 0
-
-        self.frame = tk.Frame(self.master)
-        self.frame.pack(pady=20)
-
-        self.label_tema = tk.Label(self.frame, text="Tema:")
-        self.label_tema.pack()
-
-        self.entry_tema = tk.Entry(self.frame)
-        self.entry_tema.pack()
-
-        self.botao_adicionar_tema = tk.Button(self.frame, text="Adicionar Tema", command=self.adicionar_tema)
-        self.botao_adicionar_tema.pack(pady=10)
-
-        self.botao_iniciar_quiz = tk.Button(self.frame, text="Iniciar Quiz", command=self.iniciar_quiz)
-        self.botao_iniciar_quiz.pack(pady=10)
-
-        self.label_pergunta = tk.Label(self.master, text="", wraplength=300)
-        self.label_pergunta.pack(pady=10)
-
-        self.entry_resposta = tk.Entry(self.master)
-        self.entry_resposta.pack(pady=10)
-
-        self.botao_responder = tk.Button(self.master, text="Responder", command=self.responder)
-        self.botao_responder.pack(pady=10)
+class BrainBuster:
+    def __init__():
+        print()
 
     def adicionar_tema(self):
         tema = self.entry_tema.get()
@@ -191,8 +167,11 @@ def login():
     s_es = tk.Entry(janela3,font=20, border=3, borderwidth=3, show='*')
     s_es.place(rely=0.353, relx=0.47)
     
+    tt = tk.Button(janela3, text='mostra', border=3, borderwidth=3, command=alternar_visibilidade)
+    tt.place(rely=0.353, relx=0.6)
+    
     b = tk.Button(janela3, text='login', height=1, width=8, border=3, borderwidth=3, command=entrar)
-    b.place(rely=0.4, relx=0.485)
+    b.place(rely=0.4, relx=0.5)
     
     b_r = tk.Button(janela3, text='Retornar', height=2, width=17, border=3, borderwidth=3, command=lambda: (retornar(janela3)))
     b_r.place(rely=0.94, relx=0.02)
@@ -246,10 +225,10 @@ def menu():
     global janela
     
     janela = tk.Tk()
-    janela.title('menu')
+    janela.title('BrainBuster')
 
-    t = tk.Label(janela, text='Menu', font=('Arial', 20))
-    t.place(rely=0.15, relx=0.46)
+    t = tk.Label(janela, text='BrainBuster', font=('Georgia', 20))
+    t.place(rely=0.15, relx=0.44)
     
     b_r = tk.Button(janela, text='Registro', height=2, width =15, border =3, borderwidth=3, command=registrar)
     b_r.place(rely=0.45, relx=0.35)
