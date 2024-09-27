@@ -15,11 +15,24 @@ senha = ''
 
 def alternar_visibilidade():
     global s_es
+    
     if s_es.cget('show') == '*':
         s_es.config(show='')  # Mostra a senha
-        botao.config(text='Esconder')  # Muda o texto do botão
+        s_es.config(text='Esconder')  # Muda o texto do botão
+        
     else:
         s_es.config(show='*')  # Esconde a senha
+        botao.config(text='Mostrar')  # Muda o texto do botão
+        
+def alternar():
+    global s_e
+    
+    if s_e.cget('show') == '*':
+        s_e.config(show='')
+        s_e.config(text='Esconder')
+        
+    else:
+        s_e.config(show='*')  # Esconde a senha
         botao.config(text='Mostrar')  # Muda o texto do botão
 
 def retornar(janela_atual):
@@ -151,6 +164,7 @@ def login():
     
     janela3 = tk.Tk()
     janela3.title('Entrar')
+    janela3.state('zoomed')
     
     e = tk.Label(janela3, text='Login', font=('Arial', 20))
     e.place(rely=0.15, relx=0.46)
@@ -188,6 +202,7 @@ def registrar():
     
     janela2 = tk.Tk()
     janela2.title('Registro')
+    janela2.state('zoomed')
     
     e = tk.Label(janela2, text='Registro', font=('Arial', 20))
     e.place(rely=0.15, relx=0.46)
@@ -210,6 +225,9 @@ def registrar():
     s_e = tk.Entry(janela2, font=20 ,border=3, borderwidth=3, show='*')
     s_e.place(rely=0.405, relx=0.47)
     
+    b_m = tk.Button(janela2, text='Mostrar', border=3, borderwidth=3, command=alternar)
+    b_m.place(rely=0.4, relx=0.6)
+    
     b = tk.Button(janela2, text='Registrar', height=1, width=8, border=3, borderwidth=3, command=registro)
     b.place(rely=0.45, relx=0.485)
     
@@ -226,6 +244,7 @@ def menu():
     
     janela = tk.Tk()
     janela.title('BrainBuster')
+    janela.state('zoomed')
 
     t = tk.Label(janela, text='BrainBuster', font=('Georgia', 20))
     t.place(rely=0.15, relx=0.44)
