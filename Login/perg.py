@@ -39,7 +39,8 @@ class BrainBuster:
                 BrainBuster()
         
         def Quiz():
-            print()
+            p = tk.Label(janela, text='Rhay', font=('Georgia', 20))
+            p.place(rely=0.5, relx=0.5)
 
 
         janela.mainloop()
