@@ -21,7 +21,7 @@ class BrainBuster:
         b_i = tk.Button(self.janela, text='Lista', height=2, width=15, border=3, borderwidth=3, )
         b_i.place(rely =0.45, relx=0.55)
         
-        b_r = tk.Button(self.janela, text='Retornar', height=2, width=17, border=3, borderwidth=3, command= self.retornar)
+        b_r = tk.Button(self.janela, text='Retornar', height=2, width=17, border=3, borderwidth=3, command=lambda: (retornar(self.janela)))
         b_r.place(rely=0.94, relx=0.02)
     
         b_s = tk.Button(self.janela, text='Sair', height=2, width=17, border=3, borderwidth=3, command=self.sair)
