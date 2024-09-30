@@ -1,12 +1,34 @@
 import tkinter as tk
+from random import *
 
-janela = tk.Tk()
-janela.title('menu')
-janela.state('zoomed')
+class sla:
+    
+    def __init__(self):
+        self.janela = tk.Tk()
+        self.janela.title('menu')
+        self.janela.state('zoomed')
+        
+        self.panel = tk.Label(self.janela, text='BrainBuster', font=('Georgia', 23))
+        self.panel.place(rely=0.3, relx=0.44)
+        
+        self.panel.pack_forget()
+    
+        b_r = tk.Entry(self.janela, width =15, font=('Georgia', 13))
+        b_r.place(rely=0.45, relx=0.445)
+        
+        variavel_opcao = tk.StringVar(self.janela)
+        variavel_opcao.set("Tipos de Perguntas")  # Opção padrão
 
-p = tk.Label(janela, text='Rhay', font=('Georgia', 25))
-p.place(rely=0.3, relx=0.465)
+        # Lista de opções
+        opcoes = ["Progamação", "Historia", "Anime", "Mangá", "computação"]
 
-
-
-janela.mainloop()
+        # Criando o OptionMenu
+        menu = tk.OptionMenu(self.janela, variavel_opcao, *opcoes,)
+        menu.place(rely=0.001, relx=0.03)
+        
+        self.janela.mainloop()
+        
+    def mostrar(self):
+        self.panel.place(relx=0.3, rely=0.44)
+        
+sla()

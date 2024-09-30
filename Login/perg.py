@@ -28,18 +28,22 @@ class BrainBuster:
         b_s.place(rely=0.94, relx=0.9)
         
         self.janela.mainloop()
-
         
-    def sair(self, janela_atual):
+    def Quiz(self):
+        self.perguntas = []
+        self.ponto = 0
+        self.indice_perguntas = 0
+        
+    def sair(self):
         r = messagebox.askquestion('Fechar a janela', 'Você realmente deseja fechar a janela?')
         if r.lower() == 'yes':
-            janela_atual.destroy()
+            self.janela.destroy()
                 
     def retornar(self, janela_atual):
     
         r = messagebox.askquestion('Retornar janela', 'Você realmente deseja retornar ao menu?')
         if r.lower() == 'yes':
-            janela_atual.destroy()
-            BrainBuster()
+            self.janela.destroy()
+            self.janela()
         
 BrainBuster()
