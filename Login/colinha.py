@@ -10,85 +10,93 @@ conexao = pymysql.connect(
     database='high'
 )
 
-class BrainBuster:
-    def __init__(self, titulo):
-        quiz = tk.Tk()
-        quiz.title('BrainBuster')
-        
-        t = tk.Label(quiz, text='BrainBuster', font=('Georgia', 20))
-        t.place(rely=0.15, relx=0.44)
-    
-        b_r = tk.Button(quiz, text='Estudos', height=2, width =15, border =3, borderwidth=3,)
-        b_r.place(rely=0.45, relx=0.35)
-    
-        b_l = tk.Button(quiz, text='Diversão', height=2, width=15, border=3, borderwidth=3,)
-        b_l.place(rely=0.45, relx=0.45)
-    
-        b_i = tk.Button(quiz, text='Lista', height=2, width=15, border=3, borderwidth=3, )
-        b_i.place(rely =0.45, relx=0.55)
-        
-        b_r = tk.Button(quiz, text='Retornar', height=2, width=17, border=3, borderwidth=3,)
-        b_r.place(rely=0.94, relx=0.02)
-    
-        b_s = tk.Button(quiz, text='Sair', height=2, width=17, border=3, borderwidth=3,)
-        b_s.place(rely=0.94, relx=0.9)
-        
-        quiz.mainloop()
-        
-    def perguntas(self):
-        print()
+class QuizApp:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Quiz de Perguntas e Respostas")
+        self.perguntas = []
+        self.indice_pergunta = 0
+        self.pontuacao = 0
 
-    def adicionar_tema(self):
-        tema = self.entry_tema.get()
-        if tema and tema not in self.temas:
-            self.temas[tema] = []
-            self.entry_tema.delete(0, tk.END)
-            messagebox.showinfo("Sucesso", f"Tema '{tema}' adicionado!")
+        # Interface para adicionar perguntas
+        self.frame_adicionar_pergunta = tk.Frame(master)
+        self.frame_adicionar_pergunta.pack(pady=10)
+
+        tk.Label(self.frame_adicionar_pergunta, text="Pergunta:").grid(row=0, column=0)
+        self.entrada_pergunta = tk.Entry(self.frame_adicionar_pergunta, width=40)
+        self.entrada_pergunta.grid(row=0, column=1)
+
+        tk.Label(self.frame_adicionar_pergunta, text="Resposta Correta:").grid(row=1, column=0)
+        self.entrada_resposta_correta = tk.Entry(self.frame_adicionar_pergunta, width=40)
+        self.entrada_resposta_correta.grid(row=1, column=1)
+
+        tk.Button(self.frame_adicionar_pergunta, text="Adicionar Pergunta", command=self.adicionar_pergunta).grid(row=2, columnspan=2, pady=10)
+
+        self.label_pergunta = tk.Label(master, text="", wraplength=300)
+        self.label_pergunta.pack(pady=20)
+
+        self.entrada_resposta = tk.Entry(master, width=40)
+        self.entrada_resposta.pack(pady=10)
+
+        self.botao_enviar = tk.Button(master, text="Enviar Resposta", command=self.verificar_resposta)
+        self.botao_enviar.pack(pady=5)
+
+        self.botao_proxima = tk.Button(master, text="Próxima Pergunta", command=self.proxima_pergunta)
+        self.botao_proxima.pack(pady=5)
+
+        self.botao_embaralhar = tk.Button(master, text="Embaralhar Perguntas", command=self.embaralhar_perguntas)
+        self.botao_embaralhar.pack(pady=5)
+
+    def adicionar_pergunta(self):
+        pergunta = self.entrada_pergunta.get()
+        resposta_correta = self.entrada_resposta_correta.get()
+
+        if pergunta and resposta_correta:
+            self.perguntas.append({
+                "pergunta": pergunta,
+                "resposta": resposta_correta
+            })
+            messagebox.showinfo("Sucesso", "Pergunta adicionada com sucesso!")
+            self.limpar_entradas()
         else:
-            messagebox.showwarning("Aviso", "Tema inválido ou já existe.")
+            messagebox.showwarning("Erro", "Por favor, preencha todos os campos.")
 
-    def iniciar_quiz(self):
-        tema = simpledialog.askstring("Escolha um Tema", "Digite o tema do quiz:")
-        if tema in self.temas:
-            self.tema_atual = tema
-            self.perguntas.clear()
-            self.respostas.clear()
-
-            num_perguntas = simpledialog.askinteger("Número de Perguntas", "Quantas perguntas deseja adicionar?")
-            for _ in range(num_perguntas):
-                pergunta = simpledialog.askstring("Pergunta", f"Digite a pergunta {_ + 1}:")
-                resposta = simpledialog.askstring("Resposta", "Digite a resposta:")
-                self.temas[tema].append((pergunta, resposta))
-
-            self.perguntas, self.respostas = zip(*self.temas[tema])
-            self.indice_pergunta = 0
-            self.embaralhar_perguntas()
-            self.mostrar_pergunta()
-        else:
-            messagebox.showwarning("Aviso", "Tema não encontrado.")
-
-    def mostrar_pergunta(self):
-        if self.indice_pergunta < len(self.perguntas):
-            self.label_pergunta.config(text=self.perguntas[self.indice_pergunta])
-            self.entry_resposta.delete(0, tk.END)
-        else:
-            messagebox.showinfo("Fim do Quiz", "Você respondeu todas as perguntas!")
-
-    def responder(self):
-        resposta_usuario = self.entry_resposta.get().strip()
-        resposta_correta = self.respostas[self.indice_pergunta]
-        
-        if resposta_usuario.lower() == resposta_correta.lower():
-            self.indice_pergunta += 1
-            self.mostrar_pergunta()
-        else:
-            messagebox.showwarning("Resposta Errada", "Você errou a resposta!")
-            self.embaralhar_perguntas()
-            self.mostrar_pergunta()
+    def limpar_entradas(self):
+        self.entrada_pergunta.delete(0, tk.END)
+        self.entrada_resposta_correta.delete(0, tk.END)
 
     def embaralhar_perguntas(self):
-        combined = list(zip(self.perguntas, self.respostas))
-        random.shuffle(combined)
-        self.perguntas, self.respostas = zip(*combined)
+        random.shuffle(self.perguntas)
+        self.indice_pergunta = 0
+        self.pontuacao = 0
+        self.exibir_pergunta()
 
-BrainBuster('BrainBuster')
+    def exibir_pergunta(self):
+        if self.indice_pergunta < len(self.perguntas):
+            self.label_pergunta.config(text=self.perguntas[self.indice_pergunta]["pergunta"])
+            self.entrada_resposta.delete(0, tk.END)
+        else:
+            self.label_pergunta.config(text=f"Sua pontuação: {self.pontuacao}/{len(self.perguntas)}")
+            self.entrada_resposta.pack_forget()
+            self.botao_enviar.pack_forget()
+            self.botao_proxima.pack_forget()
+            self.botao_embaralhar.pack_forget()
+
+    def verificar_resposta(self):
+        resposta_usuario = self.entrada_resposta.get()
+        resposta_correta = self.perguntas[self.indice_pergunta]["resposta"]
+
+        if resposta_usuario.strip().lower() == resposta_correta.strip().lower():
+            self.pontuacao += 1
+            messagebox.showinfo("Correto!", "Você acertou!")
+        else:
+            messagebox.showinfo("Incorreto", f"A resposta correta é: {resposta_correta}")
+
+    def proxima_pergunta(self):
+        self.indice_pergunta += 1
+        self.exibir_pergunta()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app_quiz = QuizApp(root)
+    root.mainloop()
