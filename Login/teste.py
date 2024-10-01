@@ -32,6 +32,12 @@ class sla:
         menu = tk.OptionMenu(self.janela, variavel_opcao, *opcoes,)
         menu.place(rely=0.001, relx=0.03)
         
+        b_r = tk.Button(self.janela, text='Retornar', height=2, width=17, border=3, borderwidth=3,)
+        b_r.place(rely=0.94, relx=0.02)
+    
+        b_s = tk.Button(self.janela, text='Sair', height=2, width=17, border=3, borderwidth=3,)
+        b_s.place(rely=0.94, relx=0.9)
+        
         self.janela.mainloop()
         
     def mostrar(self):
