@@ -16,8 +16,14 @@ class sla:
         b_r = tk.Entry(self.janela, width =15, font=('Georgia', 13))
         b_r.place(rely=0.45, relx=0.445)
         
+        self.mo = tk.Button(self.janela, text='Enviar', border=3, borderwidth=3, width=6)
+        self.mo.place(rely=0.45, relx=0.55)
+        
+        self.pe = tk.Button(self.janela, text='Pular pergunta', border=3, borderwidth=3)
+        self.pe.place(rely=0.5, relx=0.465)
+        
         variavel_opcao = tk.StringVar(self.janela)
-        variavel_opcao.set("Tipos de Perguntas")  # Opção padrão
+        variavel_opcao.set("Tipos de Perguntas")  # Opção padrão 
 
         # Lista de opções
         opcoes = ["Progamação", "Historia", "Anime", "Mangá", "computação"]
