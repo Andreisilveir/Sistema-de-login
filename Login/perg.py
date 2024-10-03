@@ -82,6 +82,6 @@ class BrainBuster:
         r = messagebox.askquestion('Retornar janela', 'Você realmente deseja retornar ao menu?')
         if r.lower() == 'yes':
             janela_atual.destroy()
-            self.janela()
+            self.janela()  
         
 BrainBuster()

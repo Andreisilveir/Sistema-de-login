@@ -15,7 +15,7 @@ class sla:
     
         b_r = tk.Entry(self.janela, width =15, font=('Georgia', 13))
         b_r.place(rely=0.45, relx=0.445)
-        
+    
         self.mo = tk.Button(self.janela, text='Enviar', border=3, borderwidth=3, width=6)
         self.mo.place(rely=0.45, relx=0.55)
         
