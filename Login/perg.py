@@ -3,7 +3,7 @@ from tkinter import messagebox, simpledialog
 import random
 from time import sleep
 
-class BrainBuster:
+class QuizBuster:
     def __init__(self): 
         self.janela_principal()
 
