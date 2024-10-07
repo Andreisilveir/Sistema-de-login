@@ -120,7 +120,8 @@ class BrainBuster:
                 conexao.commit()
                 
         except pymysql.Error as error:
-            print()
+            conexao.rollback()
+            messagebox.showerror('Erro', f'Ocorreu um erro ao registrar a pergunta: {error}')
         
     def registra_pergunta(self):
         question = self.question_entry.get()
