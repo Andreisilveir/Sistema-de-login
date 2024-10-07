@@ -118,6 +118,7 @@ class BrainBuster:
                 sql = 'DELETE FROM estudos(Perguntas, Repostas)'
                 cursor.execute(sql)
                 conexao.commit()
+                messagebox.showinfo('Apagado com sucesso!', 'Messagem apagada com sucesso!')
                 
         except pymysql.Error as error:
             conexao.rollback()
