@@ -115,7 +115,9 @@ class BrainBuster:
         
         try:
             with conexao.cursor as cursor:
-                sql
+                sql = 'DELETE FROM estudos(Perguntas, Repostas)'
+                cursor.execute(sql)
+                conexao.commit()
                 
         except pymysql.Error as error:
             print()
