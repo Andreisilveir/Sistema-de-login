@@ -53,19 +53,19 @@ class BrainBuster:
         e.place(rely=0.15, relx=0.46)
     
         n_t = tk.Label(self.janela3, text='Nome', font=('Arial', 16))
-        n_t.place(rely=0.3, relx=0.43)
+        n_t.place(rely=0.3, relx=0.4)
     
         self.n_es = tk.Entry(self.janela3, font=20, border=3, borderwidth=3)
-        self.n_es.place(rely=0.305, relx=0.47)
+        self.n_es.place(rely=0.305, relx=0.44)
     
         s_t = tk.Label(self.janela3, text='senha', font=('Arial', 16))
-        s_t.place(rely=0.35, relx=0.43)
+        s_t.place(rely=0.35, relx=0.395)
     
         self.s_es = tk.Entry(self.janela3,font=20, border=3, borderwidth=3, show='*')
-        self.s_es.place(rely=0.353, relx=0.47)
+        self.s_es.place(rely=0.353, relx=0.44)
     
         tt = tk.Button(self.janela3, text='mostra', border=3, borderwidth=3, command=self.alternar_visibilidade)
-        tt.place(rely=0.353, relx=0.6)
+        tt.place(rely=0.353, relx=0.59)
     
         b = tk.Button(self.janela3, text='login', height=1, width=8, border=3, borderwidth=3, command=self.entrar)
         b.place(rely=0.4, relx=0.5)
@@ -90,25 +90,25 @@ class BrainBuster:
         e.place(rely=0.15, relx=0.46)
     
         n_t = tk.Label(self.janela2, text='Nome', font=('Arial', 16))
-        n_t.place(rely=0.3, relx=0.43)
+        n_t.place(rely=0.3, relx=0.4)
     
         self.n_e = tk.Entry(self.janela2, font=20, border=3, borderwidth=3)
-        self.n_e.place(rely=0.305, relx=0.47)
+        self.n_e.place(rely=0.305, relx=0.44)
     
         e_t = tk.Label(self.janela2, text='Email', font=('Arial', 16))
-        e_t.place(rely=0.35, relx=0.43)
+        e_t.place(rely=0.35, relx=0.4)
     
         self.e_e = tk.Entry(self.janela2,font=20, border=3, borderwidth=3)
-        self.e_e.place(rely=0.353, relx=0.47)
+        self.e_e.place(rely=0.353, relx=0.44)
     
         s_t = tk.Label(self.janela2, text='Senha', font=('Arial', 16))
-        s_t.place(rely=0.4, relx=0.425)
+        s_t.place(rely=0.4, relx=0.395)
     
         self.s_e = tk.Entry(self.janela2, font=20 ,border=3, borderwidth=3, show='*')
-        self.s_e.place(rely=0.405, relx=0.47)
+        self.s_e.place(rely=0.405, relx=0.44)
     
         b_m = tk.Button(self.janela2, text='Mostrar', border=3, borderwidth=3, command=self.alternar)
-        b_m.place(rely=0.4, relx=0.6)
+        b_m.place(rely=0.405, relx=0.59)
     
         b = tk.Button(self.janela2, text='Registrar', height=1, width=8, border=3, borderwidth=3, command=self.registro)
         b.place(rely=0.45, relx=0.485)
@@ -205,14 +205,12 @@ class BrainBuster:
 class QuizBuster:
     
     def __init__(self): 
-        
         self.qa_list = []
         self.janela_principal()
 
     def janela_principal(self):
-        
         self.janela = tk.Tk()
-        self.janela.title('menu')
+        self.janela.title('Menu')
         self.janela.state('zoomed')
 
         t = tk.Label(self.janela, text='BrainBuster', font=('Georgia', 20))
@@ -221,7 +219,7 @@ class QuizBuster:
         b_r = tk.Button(self.janela, text='Quiz', height=2, width=15, border=3, borderwidth=3, command=self.quiz)
         b_r.place(rely=0.45, relx=0.35)
 
-        b_l = tk.Button(self.janela, text='Perguntas', height=2, width=15, border=3, borderwidth=3, command=self.Lista)
+        b_l = tk.Button(self.janela, text='Perguntas', height=2, width=15, border=3, borderwidth=3, command=self.lista)  # Chame o método corretamente
         b_l.place(rely=0.45, relx=0.45)
 
         b_i = tk.Button(self.janela, text='Informações', height=2, width=15, border=3, borderwidth=3)
@@ -260,9 +258,8 @@ class QuizBuster:
         b_s = tk.Button(self.janela1, text='Sair', height=2, width=17, border=3, borderwidth=3, command=lambda: self.sair(self.janela1))
         b_s.place(rely=0.94, relx=0.9)
 
-        self.janela1.mainloop()
+    def lista(self):
         
-    def Lista(self):
         self.janela.destroy()
         self.janela2 = tk.Tk()
         self.janela2.title('Registro de Perguntas e Respostas')
@@ -271,7 +268,9 @@ class QuizBuster:
         tk.Label(self.janela2, text='Registro de Perguntas e Respostas', font=('Arial', 16)).pack(pady=10)
 
         # Campo para pergunta
-        tk.Label(self.janela2, text='Digite sua pergunta:').pack(pady=5)
+        pe = tk.Label(self.janela2, text='Digite sua pergunta:')
+        pe.pack(pady=5)
+        
         self.question_entry = tk.Entry(self.janela2, width=40)
         self.question_entry.pack(pady=5)
 
@@ -286,7 +285,7 @@ class QuizBuster:
         # Listbox para exibir perguntas e respostas
         self.listbox = tk.Listbox(self.janela2, width=50, height=10)
         self.listbox.pack(pady=10)
-        
+
         tk.Button(self.janela2, text='Apagar Seleção', command=self.deletar).pack(pady=5)
 
         b_r = tk.Button(self.janela2, text='Retornar', height=2, width=17, border=3, borderwidth=3, command=lambda: self.retornar(self.janela2))
@@ -294,36 +293,72 @@ class QuizBuster:
 
         b_s = tk.Button(self.janela2, text='Sair', height=2, width=17, border=3, borderwidth=3, command=lambda: self.sair(self.janela2))
         b_s.place(rely=0.94, relx=0.9)
-        
 
-        self.janela.mainloop()
-        
+        self.carregar_perguntas()  # Carrega as perguntas ao abrir a janela
+
     def deletar(self):
-         
         try:
             selected_index = self.listbox.curselection()[0]  # Obtém o índice selecionado
-            self.listbox.delete(selected_index)  # Remove do Listbox
-            del self.qa_list[selected_index]  # Remove da lista
+            selected_item = self.listbox.get(selected_index)
+            item_id = int(selected_item.split('|')[0].split(': ')[1])  # Extrai o ID do item selecionado
+
+            # Remover do banco de dados
+            with self.conexao.cursor() as cursor:
+                sql = 'DELETE FROM estudos WHERE id = %s'
+                cursor.execute(sql, (item_id,))
+                self.conexao.commit()
+
+            # Remove do Listbox
+            self.listbox.delete(selected_index)
             messagebox.showinfo('Sucesso', 'Pergunta e resposta apagadas com sucesso!')
+        
         except IndexError:
             messagebox.showwarning('Aviso', 'Por favor, selecione uma pergunta e resposta para apagar.')
+        except pymysql.Error as error:
+            messagebox.showerror('Erro', f'Ocorreu um erro ao apagar a pergunta: {error}')
         
     def registra_pergunta(self):
         question = self.question_entry.get()
         answer = self.answer_entry.get()
-        
-        if question and answer:
-            self.qa_list.append((question, answer))  # Adiciona a pergunta e resposta à lista
-            self.listbox.insert(tk.END, f'Pergunta: {question} | Resposta: {answer}')  # Adiciona ao Listbox
-            self.question_entry.delete(0, tk.END)
-            self.answer_entry.delete(0, tk.END)
-            messagebox.showinfo('Sucesso', 'Pergunta e resposta registradas com sucesso!')
-        else:
-            messagebox.showwarning('Aviso', 'Por favor, preencha tanto a pergunta quanto a resposta.')
+    
+        try:
+            with conexao.cursor() as cursor:
+                if not question or not answer:
+                    messagebox.showwarning('Aviso', 'Por favor, preencha tanto a pergunta quanto a resposta.')
+                else:
+                    sql = 'INSERT INTO estudos(Perguntas, Respostas) VALUES(%s, %s)'
+                    cursor.execute(sql, (question, answer))
+                    conexao.commit()
+                
+                    # Adicione a pergunta e resposta ao Listbox
+                    self.listbox.insert(tk.END, f'Pergunta: {question} | Resposta: {answer}')
+                
+                    self.question_entry.delete(0, tk.END)
+                    self.answer_entry.delete(0, tk.END)
+                    messagebox.showinfo('Sucesso', 'Pergunta e resposta registradas com sucesso!')
+                
+        except pymysql.Error as error:
+            conexao.rollback()
+            messagebox.showerror('Erro', f'Ocorreu um erro ao registrar a pergunta: {error}')
 
-
+    def carregar_perguntas(self):
+        try:
+            with conexao.cursor() as cursor:
+                sql = 'SELECT Perguntas, Respostas FROM estudos'
+                cursor.execute(sql)
+                resultados = cursor.fetchall()
+            
+                # Limpa o Listbox antes de carregar os dados
+                self.listbox.delete(0, tk.END)
+                for pergunta, resposta in resultados:  # Adiciona cada resultado ao Listbox
+                    self.listbox.insert(tk.END, f'Pergunta: {pergunta} | Resposta: {resposta}')
+                
+        except pymysql.Error as error:
+            messagebox.showerror('Erro', f'Ocorreu um erro ao carregar as perguntas: {error}')
+            
     def mostrar(self):
         self.panel.place(relx=0.3, rely=0.44)
+        
 
     def sair(self, janela_atual):
         r = messagebox.askquestion('Fechar a janela', 'Você realmente deseja fechar a janela?')

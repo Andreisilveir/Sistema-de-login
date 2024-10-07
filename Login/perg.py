@@ -11,12 +11,6 @@ conexao = pymysql.connect(
     database = 'high'
 )
 
-class QuizBuster:
-    
-    import tkinter as tk
-from tkinter import messagebox
-import pymysql
-
 class BrainBuster:
     
     def __init__(self): 
@@ -112,17 +106,25 @@ class BrainBuster:
         self.carregar_perguntas()  # Carrega as perguntas ao abrir a janela
 
     def deletar(self):
-        
         try:
-            with conexao.cursor as cursor:
-                sql = 'DELETE FROM estudos(Perguntas, Repostas)'
-                cursor.execute(sql)
-                conexao.commit()
-                messagebox.showinfo('Apagado com sucesso!', 'Messagem apagada com sucesso!')
-                
+            selected_index = self.listbox.curselection()[0]  # Obtém o índice selecionado
+            selected_item = self.listbox.get(selected_index)
+            item_id = int(selected_item.split('|')[0].split(': ')[1])  # Extrai o ID do item selecionado
+
+            # Remover do banco de dados
+            with self.conexao.cursor() as cursor:
+                sql = 'DELETE FROM estudos WHERE id = %s'
+                cursor.execute(sql, (item_id,))
+                self.conexao.commit()
+
+            # Remove do Listbox
+            self.listbox.delete(selected_index)
+            messagebox.showinfo('Sucesso', 'Pergunta e resposta apagadas com sucesso!')
+        
+        except IndexError:
+            messagebox.showwarning('Aviso', 'Por favor, selecione uma pergunta e resposta para apagar.')
         except pymysql.Error as error:
-            conexao.rollback()
-            messagebox.showerror('Erro', f'Ocorreu um erro ao registrar a pergunta: {error}')
+            messagebox.showerror('Erro', f'Ocorreu um erro ao apagar a pergunta: {error}')
         
     def registra_pergunta(self):
         question = self.question_entry.get()
@@ -130,6 +132,7 @@ class BrainBuster:
     
         try:
             with conexao.cursor() as cursor:
+                
                 if not question or not answer:
                     messagebox.showwarning('Aviso', 'Por favor, preencha tanto a pergunta quanto a resposta.')
                 else:
