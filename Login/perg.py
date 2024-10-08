@@ -28,7 +28,7 @@ class BrainBuster:
         b_r = tk.Button(self.janela, text='Quiz', height=2, width=15, border=3, borderwidth=3, command=self.quiz)
         b_r.place(rely=0.45, relx=0.35)
 
-        b_l = tk.Button(self.janela, text='Perguntas', height=2, width=15, border=3, borderwidth=3, command=self.lista)  # Chame o método corretamente
+        b_l = tk.Button(self.janela, text='Perguntas', height=2, width=15, border=3, borderwidth=3, command=self.lista)
         b_l.place(rely=0.45, relx=0.45)
 
         b_i = tk.Button(self.janela, text='Informações', height=2, width=15, border=3, borderwidth=3)
@@ -44,28 +44,30 @@ class BrainBuster:
 
     def quiz(self):
         
+        self.selecionar_pergunta()
         self.janela.destroy()
         self.janela1 = tk.Tk()
         self.janela1.title('Quiz')
         self.janela1.state('zoomed')
 
-        self.panel = tk.Label(self.janela1, text='BrainBuster', font=('Georgia', 23))
-        self.panel.place(rely=0.3, relx=0.44)
-
-        b_r = tk.Entry(self.janela1, width=15, font=('Georgia', 13))
-        b_r.place(rely=0.45, relx=0.445)
-
-        self.mo = tk.Button(self.janela1, text='Enviar', border=3, borderwidth=3, width=6)
-        self.mo.place(rely=0.45, relx=0.55)
-
-        self.pe = tk.Button(self.janela1, text='Pular pergunta', border=3, borderwidth=3)
-        self.pe.place(rely=0.5, relx=0.465)
+        perguntas = tk.Label(self.janela1, text=f'{self.f}', font=('georgia', 20))
+        perguntas.place(rely=0.2, relx=0.44)
+        
+        r_e = tk.Entry(self.janela1, font=2 , border=3, borderwidth=3, width=15)
+        r_e.place(rely=0.45, relx=0.443)
+        
+        b_e = tk.Button(self.janela1, text='Enviar', border=3, borderwidth=3, width=5,)
+        b_e.place(rely=0.45, relx=0.56)
+        
+        b_p = tk.Button(self.janela1, text='Pular resposta', border=3, borderwidth=3, width=10,)
+        b_p.place(rely=0.5, relx=0.47)
 
         b_r = tk.Button(self.janela1, text='Retornar', height=2, width=17, border=3, borderwidth=3, command=lambda: self.retornar(self.janela1))
         b_r.place(rely=0.94, relx=0.02)
 
         b_s = tk.Button(self.janela1, text='Sair', height=2, width=17, border=3, borderwidth=3, command=lambda: self.sair(self.janela1))
         b_s.place(rely=0.94, relx=0.9)
+        
 
     def lista(self):
         
@@ -80,8 +82,8 @@ class BrainBuster:
         pe = tk.Label(self.janela2, text='Digite sua pergunta:')
         pe.pack(pady=5)
         
-        self.question_entry = tk.Entry(self.janela2, width=40)
-        self.question_entry.pack(pady=5)
+        self.p_e = tk.Entry(self.janela2, width=40)
+        self.p_e.pack(pady=5)
 
         # Campo para resposta
         tk.Label(self.janela2, text='Digite sua resposta:').pack(pady=5)
@@ -104,6 +106,14 @@ class BrainBuster:
         b_s.place(rely=0.94, relx=0.9)
 
         self.carregar_perguntas()  # Carrega as perguntas ao abrir a janela
+        
+    def selecionar_pergunta(self):
+
+        with conexao.cursor() as cursor:
+            sql = 'select Perguntas from estudos'
+            cursor.execute(sql)
+            self.f = cursor.fetchall()
+            conexao.commit()
 
     def deletar(self):
         try:
@@ -127,23 +137,24 @@ class BrainBuster:
             messagebox.showerror('Erro', f'Ocorreu um erro ao apagar a pergunta: {error}')
         
     def registra_pergunta(self):
-        question = self.question_entry.get()
-        answer = self.answer_entry.get()
+        self.question = self.p_e.get()
+        self.answer = self.answer_entry.get()
     
         try:
+            
             with conexao.cursor() as cursor:
                 
-                if not question or not answer:
+                if not self.p_e or not self.answer:
                     messagebox.showwarning('Aviso', 'Por favor, preencha tanto a pergunta quanto a resposta.')
                 else:
                     sql = 'INSERT INTO estudos(Perguntas, Respostas) VALUES(%s, %s)'
-                    cursor.execute(sql, (question, answer))
+                    cursor.execute(sql, (self.question, self.answer))
                     conexao.commit()
                 
                     # Adicione a pergunta e resposta ao Listbox
-                    self.listbox.insert(tk.END, f'Pergunta: {question} | Resposta: {answer}')
+                    self.listbox.insert(tk.END, f'Pergunta: {self.question} | Resposta: {self.answer}')
                 
-                    self.question_entry.delete(0, tk.END)
+                    self.p_e.delete(0, tk.END)
                     self.answer_entry.delete(0, tk.END)
                     messagebox.showinfo('Sucesso', 'Pergunta e resposta registradas com sucesso!')
                 
@@ -167,7 +178,7 @@ class BrainBuster:
             messagebox.showerror('Erro', f'Ocorreu um erro ao carregar as perguntas: {error}')
             
     def mostrar(self):
-        self.panel.place(relx=0.3, rely=0.44)
+        self.painel.place(relx=0.3, rely=0.44)
         
 
     def sair(self, janela_atual):
