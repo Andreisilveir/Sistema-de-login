@@ -128,16 +128,19 @@ class BrainBuster:
             self.s_es.config(text='Esconder')  # Muda o texto do botão
         
         else:
+            
             self.s_es.config(show='*')  # Esconde a senha
             botao.config(text='Mostrar')  # Muda o texto do botão
         
     def alternar(self):
     
         if self.s_e.cget('show') == '*':
+            
            self.s_e.config(show='')
            self.s_e.config(text='Esconder')
         
         else:
+            
             self.s_e.config(show='*')  # Esconde a senha
             botao.config(text='Mostrar')  # Muda o texto do botão
 
@@ -149,6 +152,7 @@ class BrainBuster:
             self.menu()
 
     def sair(self,janela_atual):
+        
         r = messagebox.askquestion('Fechar a janela', 'Você realmente deseja fechar a janela?')
         if r.lower() == 'yes':
             janela_atual.destroy()
@@ -170,11 +174,13 @@ class BrainBuster:
                     messagebox.showinfo('Acesso Negado!', 'Acesso negado, verifique as informações inseridas ou se registre!')
 
                 else:
+                    
                     messagebox.showinfo('Acesso aceito!', f'Seja bem-vindo(a) {self.nomes}')
                     self.janela3.destroy()
                     QuizBuster()
                 
         except pymysql.Error as error:
+            
             conexao.rollback()
             messagebox.showerror('Erro', f'{error}')
         
@@ -186,15 +192,18 @@ class BrainBuster:
     
         try:
             with conexao.cursor() as cursor:
+                
                 sql = "INSERT INTO registro(nome, email, senha) VALUES(%s, %s, %s)"
                 cursor.execute(sql, (self.nome, self.email, self.senha))
                 s = cursor.fetchall()
                 conexao.commit()
                 
                 if s == None:
+                    
                     messagebox.showinfo('Usuario negado', 'Acesso negado, repita as informações!')
                     
                 else:
+                    
                     r = messagebox.showinfo('Usuario aceito', 'Usuário registrado com sucesso, agora façã login!')
                 
         except pymysql.Error as error:
@@ -205,10 +214,12 @@ class BrainBuster:
 class QuizBuster:
     
     def __init__(self): 
+        
         self.qa_list = []
         self.janela_principal()
 
     def janela_principal(self):
+        
         self.janela = tk.Tk()
         self.janela.title('Menu')
         self.janela.state('zoomed')

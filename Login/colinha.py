@@ -72,10 +72,14 @@ class QuizApp:
         self.exibir_pergunta()
 
     def exibir_pergunta(self):
+        
         if self.indice_pergunta < len(self.perguntas):
+            
             self.label_pergunta.config(text=self.perguntas[self.indice_pergunta]["pergunta"])
             self.entrada_resposta.delete(0, tk.END)
+            
         else:
+            
             self.label_pergunta.config(text=f"Sua pontuação: {self.pontuacao}/{len(self.perguntas)}")
             self.entrada_resposta.pack_forget()
             self.botao_enviar.pack_forget()
