@@ -52,24 +52,24 @@ class BrainBuster:
     
         if self.f:
             
-            perguntas = self.f[0][0]
-            p_t = tk.Label(self.janela1, text=f'{perguntas}', font=('georgia', 20))
-            p_t.place(relx=0.5, rely=0.2, anchor='center')  # Centraliza o Label
+            self.perguntas = self.f[0][0]
+            p_t = tk.Label(self.janela1, text=f'{self.perguntas}', font=('georgia', 20))
+            p_t.place(relx=0.5, rely=0.2, anchor='center') # Centraliza o Label
         
         else:
             
             messagebox.showinfo('Sem perguntas', 'Não tem pergunta registrada!')
             p_v = tk.Label(self.janela1, text='Sem perguntas', font=('georgia', 20))
-            p_v.place(relx=0.5, rely=0.2, anchor='center')  # Centraliza o Label
+            p_v.place(relx=0.5, rely=0.2, anchor='center') # Centraliza o Label
 
         r_e = tk.Entry(self.janela1, font=2, border=3, borderwidth=3, width=15)
-        r_e.place(relx=0.5, rely=0.45, anchor='center')  # Centraliza a Entry
+        r_e.place(relx=0.5, rely=0.45, anchor='center') # Centraliza a Entry
     
         b_e = tk.Button(self.janela1, text='Enviar', border=3, borderwidth=3, width=5)
-        b_e.place(relx=0.58, rely=0.45, anchor='center')  # Posição relativa do botão
+        b_e.place(relx=0.58, rely=0.45, anchor='center') # Posição relativa do botão
     
-        b_p = tk.Button(self.janela1, text='Pular resposta', border=3, borderwidth=3, width=10)
-        b_p.place(relx=0.5, rely=0.5, anchor='center')  # Centraliza o botão
+        b_p = tk.Button(self.janela1, text='Pular pergunta', border=3, borderwidth=3, width=10)
+        b_p.place(relx=0.5, rely=0.5, anchor='center') # Centraliza o botão
     
         b_r = tk.Button(self.janela1, text='Retornar', height=2, width=17, border=3, borderwidth=3, command=lambda: self.retornar(self.janela1))
         b_r.place(rely=0.94, relx=0.02)
@@ -77,7 +77,7 @@ class BrainBuster:
         b_s = tk.Button(self.janela1, text='Sair', height=2, width=17, border=3, borderwidth=3, command=lambda: self.sair(self.janela1))
         b_s.place(rely=0.94, relx=0.9)
 
-        self.janela1.mainloop()  # Certifique-se de que a janela seja executada
+        self.janela1.mainloop()#Deixa a janela do tkinter aberta
         
 
     def lista(self):
