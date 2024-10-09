@@ -43,30 +43,41 @@ class BrainBuster:
         self.janela.mainloop()
 
     def quiz(self):
-        
+    
         self.selecionar_pergunta()
         self.janela.destroy()
         self.janela1 = tk.Tk()
         self.janela1.title('Quiz')
         self.janela1.state('zoomed')
+    
+        if self.f:
+            
+            perguntas = self.f[0][0]
+            p_t = tk.Label(self.janela1, text=f'{perguntas}', font=('georgia', 20))
+            p_t.place(relx=0.5, rely=0.2, anchor='center')  # Centraliza o Label
+        
+        else:
+            
+            messagebox.showinfo('Sem perguntas', 'Não tem pergunta registrada!')
+            p_v = tk.Label(self.janela1, text='Sem perguntas', font=('georgia', 20))
+            p_v.place(relx=0.5, rely=0.2, anchor='center')  # Centraliza o Label
 
-        perguntas = tk.Label(self.janela1, text=f'{self.f}', font=('georgia', 20))
-        perguntas.place(rely=0.2, relx=0.44)
-        
-        r_e = tk.Entry(self.janela1, font=2 , border=3, borderwidth=3, width=15)
-        r_e.place(rely=0.45, relx=0.443)
-        
-        b_e = tk.Button(self.janela1, text='Enviar', border=3, borderwidth=3, width=5,)
-        b_e.place(rely=0.45, relx=0.56)
-        
-        b_p = tk.Button(self.janela1, text='Pular resposta', border=3, borderwidth=3, width=10,)
-        b_p.place(rely=0.5, relx=0.47)
-
+        r_e = tk.Entry(self.janela1, font=2, border=3, borderwidth=3, width=15)
+        r_e.place(relx=0.5, rely=0.45, anchor='center')  # Centraliza a Entry
+    
+        b_e = tk.Button(self.janela1, text='Enviar', border=3, borderwidth=3, width=5)
+        b_e.place(relx=0.58, rely=0.45, anchor='center')  # Posição relativa do botão
+    
+        b_p = tk.Button(self.janela1, text='Pular resposta', border=3, borderwidth=3, width=10)
+        b_p.place(relx=0.5, rely=0.5, anchor='center')  # Centraliza o botão
+    
         b_r = tk.Button(self.janela1, text='Retornar', height=2, width=17, border=3, borderwidth=3, command=lambda: self.retornar(self.janela1))
         b_r.place(rely=0.94, relx=0.02)
-
+    
         b_s = tk.Button(self.janela1, text='Sair', height=2, width=17, border=3, borderwidth=3, command=lambda: self.sair(self.janela1))
         b_s.place(rely=0.94, relx=0.9)
+
+        self.janela1.mainloop()  # Certifique-se de que a janela seja executada
         
 
     def lista(self):
@@ -116,16 +127,17 @@ class BrainBuster:
             conexao.commit()
 
     def deletar(self):
+        
         try:
             selected_index = self.listbox.curselection()[0]  # Obtém o índice selecionado
             selected_item = self.listbox.get(selected_index)
             item_id = int(selected_item.split('|')[0].split(': ')[1])  # Extrai o ID do item selecionado
 
             # Remover do banco de dados
-            with self.conexao.cursor() as cursor:
+            with conexao.cursor() as cursor:
                 sql = 'DELETE FROM estudos WHERE id = %s'
                 cursor.execute(sql, (item_id,))
-                self.conexao.commit()
+                conexao.commit()
 
             # Remove do Listbox
             self.listbox.delete(selected_index)
@@ -165,21 +177,17 @@ class BrainBuster:
     def carregar_perguntas(self):
         try:
             with conexao.cursor() as cursor:
-                sql = 'SELECT Perguntas, Respostas FROM estudos'
+                sql = 'SELECT id, Perguntas, Respostas FROM estudos'
                 cursor.execute(sql)
-                resultados = cursor.fetchall()
+                resultado = cursor.fetchall()
             
                 # Limpa o Listbox antes de carregar os dados
                 self.listbox.delete(0, tk.END)
-                for pergunta, resposta in resultados:  # Adiciona cada resultado ao Listbox
-                    self.listbox.insert(tk.END, f'Pergunta: {pergunta} | Resposta: {resposta}')
+                for id, pergunta, resposta in resultado:  # Adiciona cada resultado ao Listbox
+                    self.listbox.insert(tk.END, f'ID: {id} | Pergunta: {pergunta} | Resposta: {resposta}')
                 
         except pymysql.Error as error:
             messagebox.showerror('Erro', f'Ocorreu um erro ao carregar as perguntas: {error}')
-            
-    def mostrar(self):
-        self.painel.place(relx=0.3, rely=0.44)
-        
 
     def sair(self, janela_atual):
         r = messagebox.askquestion('Fechar a janela', 'Você realmente deseja fechar a janela?')
