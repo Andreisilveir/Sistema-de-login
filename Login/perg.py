@@ -43,40 +43,34 @@ class BrainBuster:
         self.janela.mainloop()
 
     def quiz(self):
-    
+        
         self.selecionar_pergunta()
         self.janela.destroy()
         self.janela1 = tk.Tk()
         self.janela1.title('Quiz')
         self.janela1.state('zoomed')
 
-        if self.f:
-            # Converta self.f para uma lista e embaralhe
-            perguntas_lista = list(self.f)
-            shuffle(perguntas_lista)  # Embaralha a lista
-
-            # Armazene as perguntas embaralhadas
-            self.perguntas_embaralhadas = perguntas_lista
-            self.indice_pergunta_atual = 0  # Índice da pergunta atual
-
-        
-            p_t = tk.Label(self.janela1, text=f'{self.perguntas_embaralhadas[self.indice_pergunta_atual][1]}', font=('georgia', 20))
-            p_t.place(relx=0.5, rely=0.2, anchor='center')  # Centraliza o Label
-        
-        else:
+        if self.f:  # Verifica se self.f não é vazio
             
-            messagebox.showinfo('Sem perguntas', 'Não tem pergunta registrada!')
+            pergunta = self.f[0]  # Acessa o primeiro elemento da tupla
+            pergunta = pergunta.strip()  # Remove espaços em branco antes e depois
+            p_t = tk.Label(self.janela1, text=f'{pergunta}', font=('georgia', 20))  # Exibe a pergunta limpa
+            p_t.place(relx=0.5, rely=0.2, anchor='center')
+     
+        else:
+         
+            messagebox.showinfo('Sem perguntas', 'Não tem pergunta registrada!')        
             p_v = tk.Label(self.janela1, text='Sem perguntas', font=('georgia', 20))
-            p_v.place(relx=0.5, rely=0.2, anchor='center')  # Centraliza o Label
+            p_v.place(relx=0.5, rely=0.2, anchor='center')
 
         r_e = tk.Entry(self.janela1, font=2, border=3, borderwidth=3, width=15)
-        r_e.place(relx=0.5, rely=0.45, anchor='center')  # Centraliza a Entry
+        r_e.place(relx=0.5, rely=0.45, anchor='center')
 
         b_e = tk.Button(self.janela1, text='Enviar', border=3, borderwidth=3, width=5)
-        b_e.place(relx=0.58, rely=0.45, anchor='center')  # Posição relativa do botão
+        b_e.place(relx=0.58, rely=0.45, anchor='center')
 
         b_p = tk.Button(self.janela1, text='Pular pergunta', border=3, borderwidth=3, width=10)
-        b_p.place(relx=0.5, rely=0.5, anchor='center')  # Centraliza o botão
+        b_p.place(relx=0.5, rely=0.5, anchor='center')
 
         b_r = tk.Button(self.janela1, text='Retornar', height=2, width=17, border=3, borderwidth=3, command=lambda: self.retornar(self.janela1))
         b_r.place(rely=0.94, relx=0.02)
@@ -84,7 +78,7 @@ class BrainBuster:
         b_s = tk.Button(self.janela1, text='Sair', height=2, width=17, border=3, borderwidth=3, command=lambda: self.sair(self.janela1))
         b_s.place(rely=0.94, relx=0.9)
 
-        self.janela1.mainloop()  # Deixa a janela do tkinter aberta
+        self.janela1.mainloop()
         
 
     def lista(self):
@@ -128,10 +122,20 @@ class BrainBuster:
     def selecionar_pergunta(self):
 
         with conexao.cursor() as cursor:
-            sql = 'select Perguntas from estudos'
+        
+            # Consulta para obter apenas uma pergunta
+            sql = 'SELECT Perguntas FROM estudos LIMIT 1'
             cursor.execute(sql)
-            self.f = cursor.fetchall()
-            conexao.commit()
+            self.f = cursor.fetchone()  # Obtém um único registro
+
+            if self.f:  # Verifica se algum resultado foi retornado
+            
+                pergunta = self.f[0]  # Acessa o primeiro elemento da tupla
+                pergunta = pergunta.strip()  # Remove espaços em branco antes e depois
+            
+            elif not self.f:
+                
+                self.f = None  # Inicializa como None se não houver perguntas
             
     def deletar(self):
         
@@ -156,31 +160,32 @@ class BrainBuster:
             messagebox.showerror('Erro', f'Ocorreu um erro ao apagar a pergunta: {error}')
         
     def registra_pergunta(self):
+    
         self.question = self.p_e.get()
         self.answer = self.answer_entry.get()
     
         try:
-            
+        
             with conexao.cursor() as cursor:
                 
-                if not self.p_e or not self.answer:
+                if not self.question or not self.answer:
+                
                     messagebox.showwarning('Aviso', 'Por favor, preencha tanto a pergunta quanto a resposta.')
-                else:
-                    sql = 'INSERT INTO estudos(Perguntas, Respostas) VALUES(%s, %s)'
-                    cursor.execute(sql, (self.question, self.answer))
-                    conexao.commit()
+                    return  # Adiciona um retorno aqui
                 
-                    # Adicione a pergunta e resposta ao Listbox
-                    self.listbox.insert(tk.END, f'Pergunta: {self.question} | Resposta: {self.answer}')
-                
-                    self.p_e.delete(0, tk.END)
-                    self.answer_entry.delete(0, tk.END)
-                    messagebox.showinfo('Sucesso', 'Pergunta e resposta registradas com sucesso!')
-                
+                sql = 'INSERT INTO estudos(Perguntas, Respostas) VALUES(%s, %s)'
+                cursor.execute(sql, (self.question, self.answer))
+                conexao.commit()
+                self.listbox.insert(tk.END, f'Pergunta: {self.question} | Resposta: {self.answer}')
+                self.p_e.delete(0, tk.END)
+                self.answer_entry.delete(0, tk.END)
+                messagebox.showinfo('Sucesso', 'Pergunta e resposta registradas com sucesso!')
+    
         except pymysql.Error as error:
+          
             conexao.rollback()
             messagebox.showerror('Erro', f'Ocorreu um erro ao registrar a pergunta: {error}')
-
+        
     def carregar_perguntas(self):
         try:
             with conexao.cursor() as cursor:
