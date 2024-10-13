@@ -51,22 +51,21 @@ class BrainBuster:
         self.janela1.state('zoomed')
 
         if self.f:  # Verifica se self.f não é vazio
-            
-            pergunta = self.f[0]  # Acessa o primeiro elemento da tupla
-            pergunta = pergunta.strip()  # Remove espaços em branco antes e depois
-            p_t = tk.Label(self.janela1, text=f'{pergunta}', font=('georgia', 20))  # Exibe a pergunta limpa
+        
+            pergunta = self.f  # Acessa a pergunta diretamente
+            p_t = tk.Label(self.janela1, text=f'{pergunta}', font=('georgia', 20))
             p_t.place(relx=0.5, rely=0.2, anchor='center')
-     
+    
         else:
-         
-            messagebox.showinfo('Sem perguntas', 'Não tem pergunta registrada!')        
+        
+            messagebox.showinfo('Sem perguntas', 'Não tem pergunta registrada!')
             p_v = tk.Label(self.janela1, text='Sem perguntas', font=('georgia', 20))
             p_v.place(relx=0.5, rely=0.2, anchor='center')
 
-        r_e = tk.Entry(self.janela1, font=2, border=3, borderwidth=3, width=15)
-        r_e.place(relx=0.5, rely=0.45, anchor='center')
+        self.r_e = tk.Entry(self.janela1, font=2, border=3, borderwidth=3, width=15)
+        self.r_e.place(relx=0.5, rely=0.45, anchor='center')
 
-        b_e = tk.Button(self.janela1, text='Enviar', border=3, borderwidth=3, width=5)
+        b_e = tk.Button(self.janela1, text='Enviar', border=3, borderwidth=3, width=5, command=(self.revisar_resposta))
         b_e.place(relx=0.58, rely=0.45, anchor='center')
 
         b_p = tk.Button(self.janela1, text='Pular pergunta', border=3, borderwidth=3, width=10)
@@ -119,23 +118,36 @@ class BrainBuster:
 
         self.carregar_perguntas()  # Carrega as perguntas ao abrir a janela
         
+    def revisar_resposta(self):
+        
+        resposta_usuario = self.r_e.get()  # Obtém o texto da entrada
+        
+        if resposta_usuario.strip() == self.g:  # Compara com a resposta correta
+        
+            messagebox.showinfo('Certa resposta', 'Você acertou a resposta!')
+        
+        else:
+         
+            messagebox.showinfo('Resposta errada', 'Você errou a resposta.')
+        
     def selecionar_pergunta(self):
-
+        
         with conexao.cursor() as cursor:
         
-            # Consulta para obter apenas uma pergunta
-            sql = 'SELECT Perguntas FROM estudos LIMIT 1'
+            # Consulta para obter apenas uma pergunta e resposta
+            sql = 'SELECT Perguntas, Respostas FROM estudos LIMIT 1'
             cursor.execute(sql)
-            self.f = cursor.fetchone()  # Obtém um único registro
+            resultado = cursor.fetchone()  # Obtém um único registro
 
-            if self.f:  # Verifica se algum resultado foi retornado
+        if resultado:  # Verifica se algum resultado foi retornado
             
-                pergunta = self.f[0]  # Acessa o primeiro elemento da tupla
-                pergunta = pergunta.strip()  # Remove espaços em branco antes e depois
-            
-            elif not self.f:
-                
-                self.f = None  # Inicializa como None se não houver perguntas
+            self.f = resultado[0].strip()  # Acessa a pergunta
+            self.g = resultado[1].strip()  # Acessa a resposta
+        
+        else:
+        
+            self.f = None  # Não há perguntas
+            self.g = None  # Não há respostas
             
     def deletar(self):
         
