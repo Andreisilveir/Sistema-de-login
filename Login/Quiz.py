@@ -4,9 +4,9 @@ import pymysql
 
 conexao = pymysql.connect(
     host = 'localhost',
-    user = 'root',
-    password = '',
-    database = 'high'
+    user = 'Andrei',
+    password = 'Andreisr2007',
+    database = 'hadassa'
 )
 
 class BrainBuster:
