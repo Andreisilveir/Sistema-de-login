@@ -1,12 +1,22 @@
 from tkinter import messagebox
 import tkinter as tk
 import pymysql
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+db_host = os.getenv('db_host')
+db_user = os.getenv('db_user')
+db_password = os.getenv('db_password')
+db_name = os.getenv('db_name')
+
 
 conexao = pymysql.connect(
-    host = 'localhost',
-    user = 'Andrei',
-    password = 'Andreisr2007',
-    database = 'hadassa'
+    host=db_host,
+    user=db_user,
+    password=db_password,
+    database=db_name
 )
 
 class BrainBuster:
