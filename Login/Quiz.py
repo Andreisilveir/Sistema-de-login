@@ -30,7 +30,7 @@ class BrainBuster:
     
     def menu(self):
     
-        self.janela = tk.Tk()
+        self.janela = tk.Tk()#criar janela
         self.janela.title('BrainBuster')
         self.janela.state('zoomed')
 
